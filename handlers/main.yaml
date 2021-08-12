@@ -1,0 +1,4 @@
+---
+- name: Delay waiting actions
+  pause:
+    seconds: 20

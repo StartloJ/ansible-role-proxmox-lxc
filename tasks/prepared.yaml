@@ -1,0 +1,9 @@
+---
+- name: 'Debian install pip packages'
+  raw: "{{ debian_pm_command }}  {{ packages|join(' ') }}"
+  when: '''ID=debian'' in os_release.stdout_lines or ''ID=ubuntu'' in os_release.stdout_lines'
+
+- name: 'Install dependencies'
+  pip:
+    name: '{{ pip_packages }}'
+    extra_args: --user

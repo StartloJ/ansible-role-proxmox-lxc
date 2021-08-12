@@ -1,0 +1,27 @@
+---
+packages:
+  - 'python-pip'
+pip_packages:
+  - 'proxmoxer'
+node: 'pve1'
+destroyed: true
+container_pub: "{{ vault_public_key }}"
+api_user: "{{ vault_proxmox_user }}"
+api_passwd: "{{ vault_proxmox_password }}"
+api_host: '{{ ansible_host }}'
+lxc: {}
+
+# lxc:
+#   start-nginx1: # <-- VM name
+#     container_password: 'p@ssw0rd'
+#     container_template: 'local:vztmpl/ubuntu-20.04-standard_20.04-1_amd64.tar.gz'
+#     container_cpus: 2
+#     container_disk: 30
+#     container_memory: 2048
+#     container_storage: 'pve-data'
+#     container_net: '{"net0":"name=eth0,gw=10.88.255.254,ip=10.88.89.101/16,bridge=vmbr0"}'
+#     container_dns: '10.88.255.254'
+#     container_vmid: 8889101
+
+## For Ubuntu/Debian
+debian_pm_command: "apt"

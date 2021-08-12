@@ -1,0 +1,45 @@
+---
+- name: Check info LXC created
+  debug: var="create_cts_pve"
+  tags:
+    - "created"
+    - "start"
+
+- name: start container
+  community.general.proxmox:
+    node: '{{ node }}'
+    api_user: '{{ api_user }}'
+    api_password: '{{ api_passwd }}'
+    api_host: '{{ api_host }}'
+    vmid: '{{ item.value.container_vmid }}'
+    state: started
+  with_items: '{{ lxc }}'
+  tags:
+    - "created"
+    - "start"
+
+- name: Destroy existed LXC
+  block:
+    - name: Ensure stop machine
+      community.general.proxmox:
+        node: '{{ node }}'
+        api_user: '{{ api_user }}'
+        api_password: '{{ api_passwd }}'
+        api_host: '{{ api_host }}'
+        vmid: "{{ item.value.container_vmid }}"
+        state: stopped
+      with_dict: "{{ lxc }}"
+      notify:
+        - Delay waiting actions
+    - name: Remove machine
+      community.general.proxmox:
+        node: '{{ node }}'
+        api_user: '{{ api_user }}'
+        api_password: '{{ api_passwd }}'
+        api_host: '{{ api_host }}'
+        vmid: "{{ item.value.container_vmid }}"
+        state: absent
+      with_dict: "{{ lxc }}"
+  when: destroyed|bool
+  tags:
+    - "destroy"

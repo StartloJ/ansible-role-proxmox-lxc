@@ -1,0 +1,31 @@
+---
+- name: Create new container automatically selecting the next available vmid.
+  community.general.proxmox:
+    node: '{{ node }}'
+    api_user: '{{ api_user }}'
+    api_password: '{{ api_passwd }}'
+    api_host: '{{ api_host }}'
+    vmid: '{{ item.value.container_vmid }}'
+    password: '{{ item.value.container_password }}'
+    hostname: '{{ item.key }}'
+    cores: '{{ item.value.container_cpus }}'
+    memory: '{{ item.value.container_memory }}'
+    disk: '{{ item.value.container_disk }}'
+    storage: '{{ item.value.container_storage }}'
+    netif: '{{ item.value.container_net }}'
+    nameserver: '{{ item.value.container_dns }}'
+    searchdomain: '{{ item.value.container_dns }}'
+    onboot: true
+    ostemplate: '{{ item.value.container_template }}'
+    pubkey: '{{ container_pub }}'
+  with_dict: '{{ lxc }}'
+  loop_control:
+    pause: 10
+  no_log: true
+  notify:
+    - Delay waiting actions
+  register: 'create_cts_pve'
+  when: not destroyed|bool
+  tags:
+    - "created"
+
