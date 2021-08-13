@@ -13,7 +13,10 @@
     api_host: '{{ api_host }}'
     vmid: '{{ item.value.container_vmid }}'
     state: started
-  with_items: '{{ lxc }}'
+  with_dict: '{{ lxc }}'
+  retries: 5
+  delay: 5
+  when: not destroyed|bool
   tags:
     - "created"
     - "start"

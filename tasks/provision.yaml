@@ -21,7 +21,7 @@
   with_dict: '{{ lxc }}'
   loop_control:
     pause: 10
-  no_log: true
+  no_log: false
   notify:
     - Delay waiting actions
   register: 'create_cts_pve'
